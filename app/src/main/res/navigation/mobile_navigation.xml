@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/stats">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.mk.foosballmatch.ui.home.HomeFragment"
+        android:id="@+id/stats"
+        android:name="com.mk.stats.RankFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_rank" />
 
     <fragment
         android:id="@+id/add_match"
-        android:name="com.mk.foosballmatch.matches.AddMatchFragment"
+        android:name="com.mk.match.AddMatchFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/add_match_fragment" />
 
     <fragment
         android:id="@+id/add_competitor"
-        android:name="com.mk.foosballmatch.competitors.CreateCompetitorFragment"
+        android:name="com.mk.competitors.CreateCompetitorFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/create_competitor_fragment" />
 </navigation>
