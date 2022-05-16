@@ -1,8 +1,8 @@
 package com.mk.stats
 
 import androidx.room.DatabaseView
-import com.mk.competitors.CompetitorEntity
-import com.mk.match.MatchEntity
+import com.mk.competitors.data.CompetitorEntity
+import com.mk.match.data.MatchEntity
 
 @DatabaseView(viewName = "matches_played",
     value = "SELECT ${CompetitorEntity.TABLE_NAME}.${CompetitorEntity.ID} AS playerId, ${CompetitorEntity.COMPETITOR_NAME} AS playerName, count() AS matchesPlayed " +

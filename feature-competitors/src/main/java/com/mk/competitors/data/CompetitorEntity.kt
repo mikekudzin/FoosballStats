@@ -1,10 +1,10 @@
-package com.mk.competitors
+package com.mk.competitors.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.mk.competitors.CompetitorEntity.Companion.COMPETITOR_NAME
+import com.mk.competitors.data.CompetitorEntity.Companion.COMPETITOR_NAME
 
 @Entity(tableName = CompetitorEntity.TABLE_NAME,
 indices = [Index(value = [COMPETITOR_NAME], unique = true)])

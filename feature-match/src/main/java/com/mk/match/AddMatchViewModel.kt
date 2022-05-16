@@ -6,7 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import com.mk.base.BaseRxViewModel
 import com.mk.base.SingleLiveEvent
 import com.mk.base.UiEvent
-import com.mk.competitors.CompetitorsDAO
+import com.mk.competitors.data.CompetitorsDAO
+import com.mk.match.data.MatchEntity
+import com.mk.match.data.MatchesDAO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable

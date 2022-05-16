@@ -1,9 +1,11 @@
-package com.mk.stats
+package com.mk.stats.data
 
 import androidx.room.Dao
 import androidx.room.Query
-import com.mk.competitors.CompetitorEntity
-import com.mk.match.MatchEntity
+import com.mk.competitors.data.CompetitorEntity
+import com.mk.match.data.MatchEntity
+import com.mk.stats.MatchesPlayed
+import com.mk.stats.PlayerStats
 import io.reactivex.rxjava3.core.Flowable
 
 @Dao

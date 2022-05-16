@@ -1,12 +1,12 @@
-package com.mk.match
+package com.mk.match.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.mk.competitors.CompetitorEntity
-import com.mk.match.MatchEntity.Companion.COMPETITOR_1_ID
-import com.mk.match.MatchEntity.Companion.MATCH_TABLE_NAME
+import com.mk.competitors.data.CompetitorEntity
+import com.mk.match.data.MatchEntity.Companion.COMPETITOR_1_ID
+import com.mk.match.data.MatchEntity.Companion.MATCH_TABLE_NAME
 
 @Entity(
     tableName = MATCH_TABLE_NAME,

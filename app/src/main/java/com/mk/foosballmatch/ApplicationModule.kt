@@ -2,9 +2,9 @@ package com.mk.foosballmatch
 
 import android.content.Context
 import androidx.room.Room
-import com.mk.competitors.CompetitorsDAO
-import com.mk.match.MatchesDAO
-import com.mk.stats.StatsDAO
+import com.mk.competitors.data.CompetitorsDAO
+import com.mk.match.data.MatchesDAO
+import com.mk.stats.data.StatsDAO
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,21 +14,18 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class DataModule {
+class ApplicationModule {
 
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): DataBase {
-        val db = Room.databaseBuilder(
+        return Room.databaseBuilder(
             context,
             DataBase::class.java, "foos.db"
         )
-                // This shouldn't be kept for prod surely
+            // This shouldn't be kept for prod surely
             .fallbackToDestructiveMigration()
-//            .enableMultiInstanceInvalidation()
-
             .build()
-        return db
     }
 
     @Provides

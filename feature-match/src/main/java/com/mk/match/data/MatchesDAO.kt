@@ -1,4 +1,4 @@
-package com.mk.match
+package com.mk.match.data
 
 import androidx.room.*
 import io.reactivex.rxjava3.core.Completable

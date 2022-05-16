@@ -1,14 +1,12 @@
 package com.mk.competitors
 
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import com.mk.base.BaseRxViewModel
 import com.mk.base.SingleLiveEvent
 import com.mk.base.UiEvent
+import com.mk.competitors.data.CompetitorEntity
+import com.mk.competitors.data.CompetitorsDAO
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
@@ -16,7 +14,6 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateCompetitorViewModel @Inject constructor(
     private val dao: CompetitorsDAO,
-    @ApplicationContext private val context: Context
 ) : BaseRxViewModel() {
 
     private val _uiEvent = SingleLiveEvent<UiEvent>()

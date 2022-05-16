@@ -5,12 +5,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mk.base.BaseRxViewModel
+import com.mk.match.data.MatchesDAO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.minutes
 
 @HiltViewModel
 class MatchesHistoryViewModel @Inject constructor(private val matchesDAO: MatchesDAO) :

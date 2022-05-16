@@ -1,4 +1,4 @@
-package com.mk.competitors
+package com.mk.competitors.data
 
 import androidx.room.Dao
 import androidx.room.Insert

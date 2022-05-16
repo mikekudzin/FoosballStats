@@ -1,8 +1,8 @@
-package com.mk.match
+package com.mk.match.data
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.mk.competitors.CompetitorEntity
+import com.mk.competitors.data.CompetitorEntity
 
 data class MatchWithPlayers(
     @Embedded val match: MatchEntity,
