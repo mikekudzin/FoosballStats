@@ -10,17 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/competitor1Nickname"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            tools:text="Alex K"-->
-        <!--            app:layout_constraintEnd_toEndOf="@id/guideline"-->
-        <!--            android:layout_marginEnd="24dp"-->
-        <!--            android:textAppearance="?textAppearanceHeadline4"-->
-        <!--            />-->
-
-
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
@@ -48,17 +37,6 @@
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
-
-<!--        <Spinner-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_constraintEnd_toStartOf="@id/guideline"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            tools:listitem="@android:layout/activity_list_item"-->
-<!--            app:layout_constraintVertical_chainStyle="packed"-->
-<!--            app:layout_constraintBottom_toTopOf="@id/score1"/>-->
-
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/score1"

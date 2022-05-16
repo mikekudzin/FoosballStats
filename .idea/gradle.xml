@@ -13,7 +13,6 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/feature-competitors" />
-            <option value="$PROJECT_DIR$/feature-history" />
             <option value="$PROJECT_DIR$/feature-match" />
             <option value="$PROJECT_DIR$/feature-stats" />
           </set>
