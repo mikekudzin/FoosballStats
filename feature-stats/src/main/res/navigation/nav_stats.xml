@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_stats"
+    android:label="@string/label_ranks"
+    app:startDestination="@id/rankFragment">
+
+    <fragment
+        android:id="@+id/rankFragment"
+        android:name="com.mk.stats.RankFragment"
+        android:label="@string/label_ranks"
+        tools:layout="@layout/fragment_rank" />
+</navigation>

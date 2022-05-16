@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_matches"
+    app:startDestination="@id/matchesHistoryFragment">
+
+    <fragment
+        android:id="@+id/matchesHistoryFragment"
+        android:name="com.mk.match.MatchesHistoryFragment"
+        android:label="@string/label_recent_matches">
+        <action
+            android:id="@+id/action_matchesHistoryFragment_to_addMatchFragment"
+            app:destination="@id/addMatchFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addMatchFragment"
+        android:name="com.mk.match.AddMatchFragment"
+        android:label="@string/label_add_match"
+        tools:layout="@layout/add_match_fragment">
+        <argument
+            android:name="matchId"
+            app:argType="integer"
+            android:defaultValue="-1"/>
+    </fragment>
+</navigation>

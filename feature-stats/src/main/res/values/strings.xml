@@ -4,4 +4,5 @@
     <string name="games_played_title">Games played</string>
     <string name="games_won_title">Games won</string>
     <string name="total_score_title">Total score</string>
+    <string name="label_ranks">Ranks</string>
 </resources>

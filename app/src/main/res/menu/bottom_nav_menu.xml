@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/stats"
+        android:id="@id/nav_stats"
         android:icon="@drawable/stars_24dp"
         android:title="@string/title_stats" />
 
     <item
-        android:id="@+id/add_match"
+        android:id="@id/nav_matches"
         android:icon="@drawable/calendar_month_24dp"
         android:title="@string/title_matches" />
 
     <item
-        android:id="@+id/add_competitor"
+        android:id="@id/nav_competitors"
         android:icon="@drawable/group_24dp"
         android:title="@string/title_players" />
 

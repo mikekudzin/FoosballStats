@@ -1,14 +1,11 @@
 package com.mk.match
 
-import android.content.Context
-import android.util.Log
-import android.widget.Toast
+import android.icu.util.Calendar
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mk.base.BaseRxViewModel
 import com.mk.competitors.CompetitorsDAO
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -19,32 +16,30 @@ import javax.inject.Inject
 class AddMatchViewModel @Inject constructor(
     private val competitorsDAO: CompetitorsDAO,
     private val matchesDAO: MatchesDAO,
-    @ApplicationContext val context: Context
 ) : BaseRxViewModel() {
 
-    class Match {
-        var player1: UIPlayer = UIPlayer.NoPlayer
-        var player2: UIPlayer = UIPlayer.NoPlayer
-        var score1: Int = -1
-        var score2: Int = -1
-
-//        fun toMatchEntity() : MatchEntity {
-//            assert(player1 is UIPlayer.SelectedPlayer)
-//            assert(player2 is UIPlayer.SelectedPlayer)
-//            assert(score1 > 0 && score2 > 0)
-//            return MatchEntity(competitor1Id = player1.)
-//        }
+    class UIState {
+        var match = Match()
+        var dataValid = false
     }
 
-//  sealed class
+    class Match {
+        var id = 0
+        var matchTime = Calendar.getInstance().timeInMillis
+        var player1: UIPlayer = UIPlayer.NoPlayer
+        var player2: UIPlayer = UIPlayer.NoPlayer
+        var score1: String = ""
+        var score2: String = ""
+    }
 
     private var match = Match()
-    val matchData = MutableLiveData<Match>(match)
+    val matchUI = MutableLiveData<UIState>()
+
 
     private val player1Subject = BehaviorSubject.create<UIPlayer>()
     private val player2Subject = BehaviorSubject.create<UIPlayer>()
-    private val player1ScoreSubject = BehaviorSubject.create<String>()
-    private val player2ScoreSubject = BehaviorSubject.create<String>()
+
+    private val matchDataSubject = BehaviorSubject.create<Match>()
 
     private val _player1Suggestions: MutableLiveData<List<UIPlayer.SelectedPlayer>> =
         MutableLiveData()
@@ -59,10 +54,71 @@ class AddMatchViewModel @Inject constructor(
     init {
         initPlayer1Selection()
         initPlayer2Selection()
+        initVerification()
         player1Subject.onNext(UIPlayer.NoPlayer)
         player2Subject.onNext(UIPlayer.NoPlayer)
     }
 
+    private fun initVerification() {
+        withBoundSubscription {
+            matchDataSubject.map { match ->
+                with(match) {
+                    var score1Int = -1
+                    var score2Int = -1
+                    try {
+                        score1Int = Integer.parseInt(score1)
+                        score2Int = Integer.parseInt(score2)
+                    } catch (ex: Exception) {
+                        // ignore
+                    }
+
+                    val matchDataValid =
+                        player1 != UIPlayer.NoPlayer && player2 != UIPlayer.NoPlayer
+                                && score1Int > -1 && score2Int > -1
+
+                    UIState().apply {
+                        this.match = match
+                        this.dataValid = matchDataValid
+                    }
+                }
+            }.observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    matchUI.value = it
+                }
+        }
+    }
+
+    fun setMatchIdForEdit(matchId: Int) {
+        withBoundSubscription {
+            matchesDAO.getMatch(matchId)
+                .map { matchWithPlayers ->
+                    Match().apply {
+                        id = matchWithPlayers.match.id
+                        matchTime = matchWithPlayers.match.recordTime
+                        player1 = UIPlayer.SelectedPlayer(
+                            matchWithPlayers.player1.id,
+                            matchWithPlayers.player1.name
+                        )
+                        player2 = UIPlayer.SelectedPlayer(
+                            matchWithPlayers.player2.id,
+                            matchWithPlayers.player2.name
+                        )
+                        score1 = matchWithPlayers.match.competitor1Score.toString()
+                        score2 = matchWithPlayers.match.competitor2Score.toString()
+                    }
+                }
+                .doOnNext { match ->
+                    matchDataSubject.onNext(match)
+                    player1Subject.onNext(match.player1)
+                    player1Subject.onNext(match.player2)
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    match = it
+                }
+        }
+    }
 
     private fun initPlayer1Selection() {
         val subscription = player1Subject
@@ -107,66 +163,66 @@ class AddMatchViewModel @Inject constructor(
 
     fun player1Selected(player: UIPlayer) {
         match.player1 = player
-        matchData.value = match
+        matchDataSubject.onNext(match)
         player1Subject.onNext(player)
     }
 
     fun player2Selected(player: UIPlayer) {
         match.player2 = player
-        matchData.value = match
+        matchDataSubject.onNext(match)
         player2Subject.onNext(player)
     }
 
     fun player1ScoreSet(value: String) {
-        player1ScoreSubject.onNext(value)
+        if (match.score1 == value)
+            return
+
+        match.score1 = value
+        matchDataSubject.onNext(match)
     }
 
     fun player2ScoreSet(value: String) {
-        player2ScoreSubject.onNext(value)
+        if (match.score2 == value)
+            return
+
+        match.score2 = value
+        matchDataSubject.onNext(match)
     }
 
-    fun scoreFilled(score1: Int, score2: Int) {
-
-    }
-
-//    fun initVerifyFormFilled() {
-//        Observable.combineLatest(player1Subject, player2Subject, )
-//    }
-
-
-    fun saveMatchSTUB(score1: String, score2: String) {
-
+    fun saveMatchSTUB() {
         val player1 = match.player1
         val player2 = match.player2
-        var score1Int = 0
-        var score2Int = 0
+        var score1Int = -1
+        var score2Int = -1
         try {
-            score1Int = Integer.parseInt(score1)
-            score2Int = Integer.parseInt(score2)
-
-        } catch (e: NumberFormatException) {
-            Log.d("!!!!ERR" ,"$e")
+            score1Int = Integer.parseInt(match.score1)
+            score2Int = Integer.parseInt(match.score2)
+        } catch (ex: Exception) {
+            //TODO notify error
+            // ignore
         }
-        match.score1 = score1Int
-        match.score2 = score2Int
-
 
         if (player1 is UIPlayer.SelectedPlayer && player2 is UIPlayer.SelectedPlayer) {
             val entity = MatchEntity(
-                startTime = System.currentTimeMillis() - DEFAULT_LENGTH_MILLIS,
-                matchTime = DEFAULT_LENGTH_MILLIS,
+                id = match.id,
+                recordTime = match.matchTime,
                 competitor1Id = player1.id,
                 competitor2Id = player2.id,
                 competitor1Score = score1Int,
                 competitor2Score = score2Int
             )
-            val disposable = matchesDAO.saveMatch(entity)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { Toast.makeText(context, "Match saved", Toast.LENGTH_LONG).show() }
+            val disposable =
+                Observable.just(match).flatMapCompletable {
+                    if (match.id > 0) {
+                        matchesDAO.updateMatch(entity)
+                    } else {
+                        matchesDAO.saveMatch(entity)
+                    }
+                }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {  }
             bindDisposables(disposable)
         }
     }
 }
-
-const val DEFAULT_LENGTH_MILLIS = 10 * 60 * 1000L //10 min

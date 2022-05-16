@@ -1,6 +1,7 @@
 package com.mk.competitors
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.mk.base.BaseRxViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +21,7 @@ class CreateCompetitorViewModel @Inject constructor(
             dao.addCompetitor(CompetitorEntity(name = name))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnError { Log.d("!!!!", "WTF! $it") }
                 .subscribe { Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show() }
         bindDisposables(disposable)
     }

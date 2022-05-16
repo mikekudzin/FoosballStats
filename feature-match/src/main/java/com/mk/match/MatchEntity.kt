@@ -17,10 +17,9 @@ import com.mk.match.MatchEntity.Companion.MATCH_TABLE_NAME
         onDelete = ForeignKey.CASCADE
     )]
 )
-class MatchEntity(
+open class MatchEntity(
     @PrimaryKey (autoGenerate = true) val id: Int = 0,
-    val startTime: Long = 0,
-    val matchTime: Long = 0,
+    val recordTime: Long = 0,
     @ColumnInfo(name = COMPETITOR_1_ID) val competitor1Id: Int,
     @ColumnInfo(name = COMPETITOR_2_ID) val competitor2Id: Int,
     val competitor1Score: Int,
