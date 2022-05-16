@@ -4,6 +4,8 @@ import android.icu.util.Calendar
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mk.base.BaseRxViewModel
+import com.mk.base.SingleLiveEvent
+import com.mk.base.UiEvent
 import com.mk.competitors.CompetitorsDAO
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -50,6 +52,10 @@ class AddMatchViewModel @Inject constructor(
         MutableLiveData()
     val player2Suggestions: LiveData<List<UIPlayer.SelectedPlayer>>
         get() = _player2Suggestions
+
+    private val _uiEvent = SingleLiveEvent<UiEvent>()
+    val uiEvent: LiveData<UiEvent>
+        get() = _uiEvent
 
     init {
         initPlayer1Selection()
@@ -189,7 +195,7 @@ class AddMatchViewModel @Inject constructor(
         matchDataSubject.onNext(match)
     }
 
-    fun saveMatchSTUB() {
+    fun saveMatch() {
         val player1 = match.player1
         val player2 = match.player2
         var score1Int = -1
@@ -221,7 +227,7 @@ class AddMatchViewModel @Inject constructor(
                 }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {  }
+                    .subscribe { _uiEvent.setValue(UiEvent.Success) }
             bindDisposables(disposable)
         }
     }

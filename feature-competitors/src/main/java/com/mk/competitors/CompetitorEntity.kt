@@ -1,12 +1,16 @@
 package com.mk.competitors
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.mk.competitors.CompetitorEntity.Companion.COMPETITOR_NAME
 
-@Entity(tableName = CompetitorEntity.TABLE_NAME)
+@Entity(tableName = CompetitorEntity.TABLE_NAME,
+indices = [Index(value = [COMPETITOR_NAME], unique = true)])
 data class CompetitorEntity(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
-    val name: String
+    @ColumnInfo()val name: String
     ) {
     companion object {
         const val TABLE_NAME = "competitors"

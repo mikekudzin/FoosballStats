@@ -44,6 +44,7 @@ dependencies {
     implementation project(":feature-competitors")
     implementation project(":feature-match")
     implementation project(":feature-stats")
+    implementation project(":base")
     implementation "androidx.core:core-ktx:1.7.0"
     implementation "com.google.dagger:hilt-android:2.41"
     //rxjava

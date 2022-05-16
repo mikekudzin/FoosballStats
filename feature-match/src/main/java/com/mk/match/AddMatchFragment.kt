@@ -4,18 +4,19 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.mk.base.SharedNotificationViewModel
+import com.mk.base.UiEvent
 import com.mk.match.databinding.AddMatchFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,6 +25,7 @@ class AddMatchFragment : Fragment() {
 
     private val args: AddMatchFragmentArgs by navArgs()
     private val viewModel: AddMatchViewModel by viewModels()
+    private val sharedViewModel: SharedNotificationViewModel by activityViewModels()
     private lateinit var binding: AddMatchFragmentBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,15 +70,25 @@ class AddMatchFragment : Fragment() {
 
         })
 
+        viewModel.uiEvent.observe(viewLifecycleOwner) {
+            when(it) {
+                UiEvent.Success -> {
+                    sharedViewModel.showNotification("Match saved")
+                    findNavController().popBackStack()
+                }
+                is UiEvent.Error -> {
+                    sharedViewModel.showNotificationError(it.text)
+                }
+            }
+        }
+
 
         initSaveMatch()
     }
 
     private fun initSaveMatch() {
         binding.button2.setOnClickListener {
-            viewModel.saveMatchSTUB()
-            // TODO notify ACTIVITY MESSAGES HOST
-            findNavController().popBackStack()
+            viewModel.saveMatch()
         }
     }
 
