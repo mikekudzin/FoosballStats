@@ -24,9 +24,6 @@ open class MatchEntity(
     @ColumnInfo(name = COMPETITOR_2_ID) val competitor2Id: Int,
     val competitor1Score: Int,
     val competitor2Score: Int,
-
-//    val competitor1Name: String="",    // We'll wont insert names
-//    val competitor2Name: String="",
 ) {
     companion object {
         const val MATCH_TABLE_NAME = "matches"

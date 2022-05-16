@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import com.mk.competitors.CompetitorEntity
 
-data class MatcheWithPlayers(
+data class MatchWithPlayers(
     @Embedded val match: MatchEntity,
     @Relation(parentColumn = MatchEntity.COMPETITOR_1_ID,
     entityColumn = "id")
