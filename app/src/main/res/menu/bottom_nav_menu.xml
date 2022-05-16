@@ -3,17 +3,17 @@
 
     <item
         android:id="@+id/stats"
-        android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_home" />
+        android:icon="@drawable/stars_24dp"
+        android:title="@string/title_stats" />
 
     <item
         android:id="@+id/add_match"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:icon="@drawable/calendar_month_24dp"
+        android:title="@string/title_matches" />
 
     <item
         android:id="@+id/add_competitor"
-        android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/title_notifications" />
+        android:icon="@drawable/group_24dp"
+        android:title="@string/title_players" />
 
 </menu>

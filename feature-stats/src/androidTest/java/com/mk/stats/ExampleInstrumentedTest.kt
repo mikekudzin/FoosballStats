@@ -1,4 +1,4 @@
-package com.mk.feature_stats
+package com.mk.stats
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

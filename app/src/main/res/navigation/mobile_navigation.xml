@@ -8,18 +8,18 @@
     <fragment
         android:id="@+id/stats"
         android:name="com.mk.stats.RankFragment"
-        android:label="@string/title_home"
+        android:label="@string/title_stats"
         tools:layout="@layout/fragment_rank" />
 
     <fragment
         android:id="@+id/add_match"
         android:name="com.mk.match.AddMatchFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_matches"
         tools:layout="@layout/add_match_fragment" />
 
     <fragment
         android:id="@+id/add_competitor"
         android:name="com.mk.competitors.CreateCompetitorFragment"
-        android:label="@string/title_notifications"
+        android:label="@string/title_players"
         tools:layout="@layout/create_competitor_fragment" />
 </navigation>

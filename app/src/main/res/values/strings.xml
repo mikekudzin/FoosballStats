@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Foosball Match</string>
     <string name="title_activity_foos_activiity">FoosActiviity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_stats">Ranks</string>
+    <string name="title_matches">Matches</string>
+    <string name="title_players">Players</string>
 </resources>

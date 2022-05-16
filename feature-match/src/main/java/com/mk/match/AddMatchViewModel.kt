@@ -72,7 +72,7 @@ class AddMatchViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { _player2Suggestions.value = it }
 
-        bindDisposable(subscription)
+        bindDisposables(subscription)
     }
 
     private fun initPlayer2Selection() {
@@ -85,7 +85,7 @@ class AddMatchViewModel @Inject constructor(
                 _player1Suggestions.value = it
             }
 
-        bindDisposable(subscription)
+        bindDisposables(subscription)
     }
 
     private fun filterPlayerOut(player: UIPlayer) =
@@ -164,7 +164,7 @@ class AddMatchViewModel @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { Toast.makeText(context, "Match saved", Toast.LENGTH_LONG).show() }
-            bindDisposable(disposable)
+            bindDisposables(disposable)
         }
     }
 }

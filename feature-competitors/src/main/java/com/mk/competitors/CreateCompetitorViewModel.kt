@@ -21,7 +21,7 @@ class CreateCompetitorViewModel @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show() }
-        bindDisposable(disposable)
+        bindDisposables(disposable)
     }
 
 }

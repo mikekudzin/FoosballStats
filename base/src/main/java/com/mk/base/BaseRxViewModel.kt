@@ -10,7 +10,7 @@ open class BaseRxViewModel: ViewModel() {
         super.onCleared()
     }
 
-    fun bindDisposable(disposable: Disposable) {
-        vmScopeDisposable.addAll(disposable)
+    fun bindDisposables(vararg disposable: Disposable) {
+        vmScopeDisposable.addAll(*disposable)
     }
 }

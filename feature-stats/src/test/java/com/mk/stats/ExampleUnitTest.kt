@@ -1,4 +1,4 @@
-package com.mk.feature_stats
+package com.mk.stats
 
 import org.junit.Test
 
