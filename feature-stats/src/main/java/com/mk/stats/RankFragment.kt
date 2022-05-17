@@ -35,7 +35,7 @@ class RankFragment : Fragment() {
             addItemDecoration(
                 DividerItemDecoration(
                     requireContext(),
-                    DividerItemDecoration.HORIZONTAL
+                    DividerItemDecoration.VERTICAL
                 )
             )
         }

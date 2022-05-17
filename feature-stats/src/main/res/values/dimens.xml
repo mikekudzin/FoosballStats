@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="rank_section_width">80dp</dimen>
+    <dimen name="stats_section_width">100dp</dimen>
+    <dimen name="rank_item_height">50dp</dimen>
+</resources>

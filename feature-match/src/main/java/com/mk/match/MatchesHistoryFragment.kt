@@ -1,7 +1,10 @@
 package com.mk.match
 
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.view.*
+import androidx.core.text.bold
+import androidx.core.text.scale
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -42,7 +45,7 @@ class MatchesHistoryFragment : Fragment() {
             addItemDecoration(
                 DividerItemDecoration(
                     requireContext(),
-                    DividerItemDecoration.HORIZONTAL
+                    DividerItemDecoration.VERTICAL
                 )
             )
         }
@@ -93,8 +96,17 @@ class MatchesHistoryFragment : Fragment() {
             fun bindData(data: MatchesHistoryViewModel.MatchStats) {
                 with(binder) {
                     date.text = data.date
-                    players.text =
-                        "${data.player1Name} ${data.player1Score} : ${data.player2Score} ${data.player2Name}"
+                    val s = SpannableStringBuilder()
+                        .append(data.player1Name)
+                        .append("  ")
+                        .scale(1.2f) {
+                            bold {
+                                append("${data.player1Score} : ${data.player2Score}")
+                            }
+                        }.append("  ")
+                        .append(data.player2Name)
+
+                    players.text = s
                 }
             }
 

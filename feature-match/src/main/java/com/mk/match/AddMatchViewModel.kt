@@ -106,7 +106,8 @@ class AddMatchViewModel @AssistedInject constructor(
             player1Subject
                 .switchMap { player ->
                     filterPlayerOut(player)
-                }.subscribeOn(Schedulers.io())
+                }
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { _player2Suggestions.value = it }
         }
