@@ -13,9 +13,10 @@ import com.mk.match.data.MatchesRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import io.reactivex.rxjava3.subjects.BehaviorSubject
+import io.reactivex.rxjava3.subjects.PublishSubject
 
 class AddMatchViewModel @AssistedInject constructor(
     private val competitorsRepository: CompetitorsRepository,
@@ -26,9 +27,9 @@ class AddMatchViewModel @AssistedInject constructor(
     private var match = Match()
     val matchUI = MutableLiveData<UIState>()
 
-    private val player1Subject = BehaviorSubject.create<UIPlayer>()
-    private val player2Subject = BehaviorSubject.create<UIPlayer>()
-    private val matchDataSubject = BehaviorSubject.create<Match>()
+    private val player1Subject = PublishSubject.create<UIPlayer>()
+    private val player2Subject = PublishSubject.create<UIPlayer>()
+    private val matchDataSubject = PublishSubject.create<Match>()
 
     private val _player1Suggestions: MutableLiveData<List<UIPlayer.SelectedPlayer>> =
         MutableLiveData()
@@ -84,14 +85,18 @@ class AddMatchViewModel @AssistedInject constructor(
 
     private fun setMatchIdForEdit(matchId: Int) {
         withBoundSubscription {
-            matchesRepository.getMatch(matchId)
-                .map { matchWithPlayers ->
-                    Match.fromMatchEntity(matchWithPlayers)
+            Maybe.just(matchId)
+                .filter { matchId != -1 }
+                .flatMap {
+                    matchesRepository.getMatch(matchId)
+                        .map { matchWithPlayers ->
+                            Match.fromMatchEntity(matchWithPlayers)
+                        }
                 }
-                .doOnSuccess { match ->
-                    matchDataSubject.onNext(match)
-                    player1Subject.onNext(match.player1)
-                    player1Subject.onNext(match.player2)
+                .doAfterSuccess {
+                    matchDataSubject.onNext(it)
+                    player1Subject.onNext(it.player1)
+                    player2Subject.onNext(it.player2)
                 }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -109,7 +114,9 @@ class AddMatchViewModel @AssistedInject constructor(
                 }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { _player2Suggestions.value = it }
+                .subscribe {
+                    _player2Suggestions.value = it
+                }
         }
     }
 
@@ -157,6 +164,7 @@ class AddMatchViewModel @AssistedInject constructor(
     }
 
     fun player1ScoreSet(value: String) {
+
         if (match.score1 == value) {
             return
         }
@@ -240,6 +248,20 @@ class Match {
                 score1 = matchWithPlayers.match.competitor1Score.toString()
                 score2 = matchWithPlayers.match.competitor2Score.toString()
             }
+        }
+    }
+}
+
+sealed class UIPlayer {
+    object NoPlayer : UIPlayer() {
+        override fun toString(): String {
+            return "Select player"
+        }
+    }
+
+    data class SelectedPlayer(val id: Int, val name: String) : UIPlayer() {
+        override fun toString(): String {
+            return name
         }
     }
 }
