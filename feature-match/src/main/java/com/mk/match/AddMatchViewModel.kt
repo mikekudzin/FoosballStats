@@ -6,10 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import com.mk.base.BaseRxViewModel
 import com.mk.base.SingleLiveEvent
 import com.mk.base.UiEvent
-import com.mk.competitors.data.CompetitorsDAO
+import com.mk.competitors.data.CompetitorsRepository
 import com.mk.match.data.MatchEntity
 import com.mk.match.data.MatchWithPlayers
-import com.mk.match.data.MatchesDAO
+import com.mk.match.data.MatchesRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -18,8 +18,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 
 class AddMatchViewModel @AssistedInject constructor(
-    private val competitorsDAO: CompetitorsDAO,
-    private val matchesDAO: MatchesDAO,
+    private val competitorsRepository: CompetitorsRepository,
+    private val matchesRepository: MatchesRepository,
     @Assisted val matchId: Int
 ) : BaseRxViewModel() {
 
@@ -84,7 +84,7 @@ class AddMatchViewModel @AssistedInject constructor(
 
     private fun setMatchIdForEdit(matchId: Int) {
         withBoundSubscription {
-            matchesDAO.getMatch(matchId)
+            matchesRepository.getMatch(matchId)
                 .map { matchWithPlayers ->
                     Match.fromMatchEntity(matchWithPlayers)
                 }
@@ -126,7 +126,7 @@ class AddMatchViewModel @AssistedInject constructor(
     }
 
     private fun filterPlayerOut(player: UIPlayer): Observable<MutableList<UIPlayer.SelectedPlayer>> {
-        return competitorsDAO
+        return competitorsRepository
             .getCompetitors()
             .toObservable()
             .flatMapSingle { competitors ->
@@ -197,9 +197,9 @@ class AddMatchViewModel @AssistedInject constructor(
             withBoundSubscription {
                 Observable.just(match).flatMapCompletable {
                     if (match.id > 0) {
-                        matchesDAO.updateMatch(entity)
+                        matchesRepository.updateMatch(entity)
                     } else {
-                        matchesDAO.saveMatch(entity)
+                        matchesRepository.saveMatch(entity)
                     }
                 }
                     .subscribeOn(Schedulers.io())

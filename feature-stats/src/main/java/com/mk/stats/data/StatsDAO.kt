@@ -5,9 +5,9 @@ import androidx.room.Query
 import io.reactivex.rxjava3.core.Flowable
 
 @Dao
-interface StatsDAO {
+interface StatsDAO: StatsRepository {
 
     @Query("SELECT * FROM player_stats;")
-    fun getPlayersStats(): Flowable<List<PlayerStats>>
+    override fun getPlayersStats(): Flowable<List<PlayerStats>>
 
 }

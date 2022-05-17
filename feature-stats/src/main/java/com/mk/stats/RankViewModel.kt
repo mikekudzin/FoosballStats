@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.mk.base.BaseRxViewModel
 import com.mk.stats.data.PlayerStats
-import com.mk.stats.data.StatsDAO
+import com.mk.stats.data.StatsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
@@ -13,7 +13,7 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 
 @HiltViewModel
-class RankViewModel @Inject constructor(private val statsDAO: StatsDAO) : BaseRxViewModel() {
+class RankViewModel @Inject constructor(private val statsRepository: StatsRepository) : BaseRxViewModel() {
     private val rankTypeSelected = BehaviorSubject.create<RankType>()
     private val _statResult = MutableLiveData<List<PlayerStatUI>>()
     val data: LiveData<List<PlayerStatUI>>
@@ -30,7 +30,7 @@ class RankViewModel @Inject constructor(private val statsDAO: StatsDAO) : BaseRx
 
     private fun initRankBasedOnInput() {
         val disposable = Observable.combineLatest(
-            statsDAO.getPlayersStats().toObservable(),
+            statsRepository.getPlayersStats().toObservable(),
             rankTypeSelected.distinctUntilChanged()
         ) { first: List<PlayerStats>, second: RankType ->
             first to second

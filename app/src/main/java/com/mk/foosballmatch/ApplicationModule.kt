@@ -3,8 +3,12 @@ package com.mk.foosballmatch
 import android.content.Context
 import androidx.room.Room
 import com.mk.competitors.data.CompetitorsDAO
+import com.mk.competitors.data.CompetitorsRepository
 import com.mk.match.data.MatchesDAO
+import com.mk.match.data.MatchesRepository
 import com.mk.stats.data.StatsDAO
+import com.mk.stats.data.StatsRepository
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,7 +18,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class ApplicationModule {
+abstract class ApplicationModule {
 
     @Provides
     @Singleton
@@ -45,4 +49,13 @@ class ApplicationModule {
     fun provideStatsDao(dataBase: DataBase): StatsDAO {
         return dataBase.statsDao()
     }
+
+    @Binds
+    abstract fun bindCompetitorsRepo(dao: CompetitorsDAO): CompetitorsRepository
+
+    @Binds
+    abstract fun bindMatchesRepo(dao: MatchesDAO): MatchesRepository
+
+    @Binds
+    abstract fun bindStatsRepo(dao: StatsDAO): StatsRepository
 }

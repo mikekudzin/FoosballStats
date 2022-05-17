@@ -7,11 +7,11 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 
 @Dao
-interface CompetitorsDAO {
+interface CompetitorsDAO: CompetitorsRepository {
 
     @Query("SELECT * FROM ${CompetitorEntity.TABLE_NAME}")
-    fun getCompetitors(): Flowable<List<CompetitorEntity>>
+    override fun getCompetitors(): Flowable<List<CompetitorEntity>>
 
     @Insert
-    fun addCompetitor(competitor: CompetitorEntity): Completable
+    override fun addCompetitor(competitor: CompetitorEntity): Completable
 }

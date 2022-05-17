@@ -9,21 +9,21 @@ import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Maybe
 
 @Dao
-interface MatchesDAO {
+interface MatchesDAO : MatchesRepository{
 
     @Insert
-    fun saveMatch(match: MatchEntity): Completable
+    override fun saveMatch(match: MatchEntity): Completable
 
     @Update
-    fun updateMatch(match: MatchEntity): Completable
+    override fun updateMatch(match: MatchEntity): Completable
 
     @Query("SELECT * FROM ${MatchEntity.MATCH_TABLE_NAME} ORDER BY recordTime DESC")
-    fun getAllMatches(): Flowable<List<MatchWithPlayers>>
+    override fun getAllMatches(): Flowable<List<MatchWithPlayers>>
 
     @Query("SELECT * FROM ${MatchEntity.MATCH_TABLE_NAME} WHERE id = :matchId")
-    fun getMatch(matchId: Int): Maybe<MatchWithPlayers>
+    override fun getMatch(matchId: Int): Maybe<MatchWithPlayers>
 
     @Query("DELETE FROM ${MatchEntity.MATCH_TABLE_NAME} WHERE id = :matchId")
-    fun deleteMatch(matchId: Int) : Completable
+    override fun deleteMatch(matchId: Int) : Completable
 
 }
