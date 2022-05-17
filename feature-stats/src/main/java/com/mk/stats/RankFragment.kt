@@ -40,33 +40,32 @@ class RankFragment : Fragment() {
             )
         }
 
-        binding.toggleButtonGroup.addOnButtonCheckedListener { group: MaterialButtonToggleGroup, checkedId: Int, isChecked: Boolean ->
+        binding.toggleButtonGroup.addOnButtonCheckedListener { _: MaterialButtonToggleGroup, checkedId: Int, isChecked: Boolean ->
             if (!isChecked) return@addOnButtonCheckedListener
 
             val sortType = when (checkedId) {
-                R.id.first -> RankViewModel.RankType.MatchesPlayed
-                R.id.second -> RankViewModel.RankType.MatchesWon
-                else -> RankViewModel.RankType.TotalScore
+                R.id.first -> RankType.MatchesPlayed
+                R.id.second -> RankType.MatchesWon
+                else -> RankType.TotalScore
             }
             viewModel.changeRankType(sortType)
         }
 
         viewModel.rankType.observe(viewLifecycleOwner) {
             val id = when (it) {
-                RankViewModel.RankType.MatchesPlayed -> R.id.first
-                RankViewModel.RankType.MatchesWon -> R.id.second
+                RankType.MatchesPlayed -> R.id.first
+                RankType.MatchesWon -> R.id.second
                 else -> R.id.third
             }
 
             binding.toggleButtonGroup.check(id)
 
             val starTitle = when (it) {
-                RankViewModel.RankType.MatchesPlayed -> R.string.games_played_title
-                RankViewModel.RankType.MatchesWon -> R.string.games_won_title
+                RankType.MatchesPlayed -> R.string.games_played_title
+                RankType.MatchesWon -> R.string.games_won_title
                 else -> R.string.total_score_title
             }
             binding.statValue.text = getString(starTitle)
-
         }
 
         viewModel.data.observe(viewLifecycleOwner) {
@@ -77,40 +76,38 @@ class RankFragment : Fragment() {
         return binding.root
     }
 
-    class Adapter() : RecyclerView.Adapter<Adapter.ViewHolder>() {
+    class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
 
-        private val differ: AsyncListDiffer<RankViewModel.PlayerStatUI> =
+        private val differ: AsyncListDiffer<PlayerStatUI> =
             AsyncListDiffer(this, DIFF_CALLBACK)
 
         companion object {
-            val DIFF_CALLBACK = object : ItemCallback<RankViewModel.PlayerStatUI>() {
+            val DIFF_CALLBACK = object : ItemCallback<PlayerStatUI>() {
                 override fun areItemsTheSame(
-                    oldItem: RankViewModel.PlayerStatUI,
-                    newItem: RankViewModel.PlayerStatUI
+                    oldItem: PlayerStatUI,
+                    newItem: PlayerStatUI
                 ): Boolean {
                     return oldItem.playerId == newItem.playerId
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: RankViewModel.PlayerStatUI,
-                    newItem: RankViewModel.PlayerStatUI
+                    oldItem: PlayerStatUI,
+                    newItem: PlayerStatUI
                 ): Boolean {
                     return oldItem == newItem
                 }
-
             }
         }
 
         class ViewHolder(private val binder: StatItemViewBinding) :
             RecyclerView.ViewHolder(binder.root) {
 
-            fun bindData(data: RankViewModel.PlayerStatUI, pos: Int) {
+            fun bindData(data: PlayerStatUI) {
                 with(binder) {
                     position.text = "#${data.position + 1}"
                     playerName.text = data.playerName
                     statValue.text = data.statValue.toString()
                 }
-
             }
         }
 
@@ -122,14 +119,14 @@ class RankFragment : Fragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val data = differ.currentList[position]
-            holder.bindData(data, position)
+            holder.bindData(data)
         }
 
         override fun getItemCount(): Int {
             return differ.currentList.size
         }
 
-        fun submitNewData(dataSet: List<RankViewModel.PlayerStatUI>, callback: Runnable?) {
+        fun submitNewData(dataSet: List<PlayerStatUI>, callback: Runnable?) {
             differ.submitList(dataSet, callback)
         }
     }

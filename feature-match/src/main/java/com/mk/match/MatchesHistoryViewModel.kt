@@ -30,7 +30,8 @@ class MatchesHistoryViewModel @Inject constructor(private val matchesDAO: Matche
         get() = _matches
 
     init {
-        val disposable = matchesDAO.getAllMatches()
+        withBoundSubscription {
+         matchesDAO.getAllMatches()
             .flatMapSingle {
                 Observable.fromIterable(it).map { matchWithPlayers ->
                     with(matchWithPlayers) {
@@ -49,32 +50,18 @@ class MatchesHistoryViewModel @Inject constructor(private val matchesDAO: Matche
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { matches ->
-                matches.forEach {
-                    with(it) {
-                        Log.d(
-                            "!!!!",
-                            "Match $id  $player1Name $player1Score : $player2Score $player2Name"
-                        )
-                    }
-                }
                 _matches.value = matches
             }
-        bindDisposables(disposable)
+        }
     }
 
     fun deleteMatch(matchId: Int) {
-        Log.d("!!!!", "To delete $matchId")
         withBoundSubscription {
             matchesDAO
                 .deleteMatch(matchId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnError {
-                    Log.d("!!!!", "Failed to delete $matchId $it")
-                }
-                .subscribe({
-                    Log.d("!!!!", "Deleted $matchId")
-                })
+                .subscribe {}
         }
     }
 }

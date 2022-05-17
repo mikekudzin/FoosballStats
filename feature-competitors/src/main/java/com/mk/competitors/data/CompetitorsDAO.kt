@@ -14,5 +14,4 @@ interface CompetitorsDAO {
 
     @Insert
     fun addCompetitor(competitor: CompetitorEntity): Completable
-
 }

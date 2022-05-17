@@ -23,7 +23,7 @@ open class MatchEntity(
     @ColumnInfo(name = COMPETITOR_1_ID) val competitor1Id: Int,
     @ColumnInfo(name = COMPETITOR_2_ID) val competitor2Id: Int,
     val competitor1Score: Int,
-    val competitor2Score: Int,
+    val competitor2Score: Int
 ) {
     companion object {
         const val MATCH_TABLE_NAME = "matches"

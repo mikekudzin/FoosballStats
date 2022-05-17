@@ -20,7 +20,6 @@ class MatchesHistoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = MatchesHistoryBinding.inflate(inflater, container, false)
-
         binding.addMatch.setOnClickListener {
             findNavController().navigate(R.id.addMatchFragment)
         }
@@ -53,6 +52,7 @@ class MatchesHistoryFragment : Fragment() {
                 binding.recycler.scrollToPosition(0)
             }
         }
+
         return binding.root
     }
 
@@ -80,7 +80,6 @@ class MatchesHistoryFragment : Fragment() {
                     ): Boolean {
                         return oldItem == newItem
                     }
-
                 }
         }
 
@@ -97,7 +96,6 @@ class MatchesHistoryFragment : Fragment() {
                     players.text =
                         "${data.player1Name} ${data.player1Score} : ${data.player2Score} ${data.player2Name}"
                 }
-
             }
 
             override fun onCreateContextMenu(
@@ -119,7 +117,6 @@ class MatchesHistoryFragment : Fragment() {
                     onDeleteMatch(matchId)
                     true
                 }
-
             }
         }
 

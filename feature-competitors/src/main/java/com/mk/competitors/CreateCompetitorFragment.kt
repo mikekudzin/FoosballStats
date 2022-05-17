@@ -38,5 +38,4 @@ class CreateCompetitorFragment : Fragment() {
 
         return binding.root
     }
-
 }

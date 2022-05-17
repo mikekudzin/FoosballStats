@@ -39,7 +39,7 @@ android {
 def nav_version = "2.4.2"
 def roomVersion = "2.4.2"
 dependencies {
-    implementation project(":base")
+    implementation project(':core-utils')
     implementation project(":feature-competitors")
 
     implementation "androidx.core:core-ktx:1.7.0"

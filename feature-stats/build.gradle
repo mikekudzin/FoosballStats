@@ -39,8 +39,7 @@ def nav_version = "2.4.2"
 def roomVersion = "2.4.2"
 dependencies {
 
-    implementation project(":base")
-    // data layer could be extracted to core-feature modules
+    implementation project(':core-utils')// data layer could be extracted to core-feature modules
     implementation project(":feature-competitors")
     implementation project(":feature-match")
 

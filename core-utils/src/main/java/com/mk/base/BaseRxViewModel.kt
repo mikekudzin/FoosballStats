@@ -5,13 +5,14 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 
 open class BaseRxViewModel: ViewModel() {
-    private val vmScopeDisposable = CompositeDisposable()
+    private val compositeDisposable = CompositeDisposable()
     override fun onCleared() {
         super.onCleared()
+        compositeDisposable.clear()
     }
 
     fun bindDisposables(vararg disposable: Disposable) {
-        vmScopeDisposable.addAll(*disposable)
+        compositeDisposable.addAll(*disposable)
     }
 
     fun withBoundSubscription(block: () -> Disposable) {

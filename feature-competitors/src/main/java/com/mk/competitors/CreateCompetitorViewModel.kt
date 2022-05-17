@@ -21,15 +21,20 @@ class CreateCompetitorViewModel @Inject constructor(
         get() = _uiEvent
 
     fun createCompetitor(name: String) {
-        val disposable =
+        withBoundSubscription {
             dao.addCompetitor(CompetitorEntity(name = name.trim()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { _uiEvent.setValue(UiEvent.Success) },
-                    { err -> _uiEvent.setValue(UiEvent.Error(err.message?:"Failed to create")) }
+                    { err ->
+                        _uiEvent.setValue(
+                            UiEvent.Error(
+                                err.message ?: "Failed to create player"
+                            )
+                        )
+                    }
                 )
-        bindDisposables(disposable)
+        }
     }
-
 }

@@ -8,41 +8,26 @@ import com.mk.base.SingleLiveEvent
 import com.mk.base.UiEvent
 import com.mk.competitors.data.CompetitorsDAO
 import com.mk.match.data.MatchEntity
+import com.mk.match.data.MatchWithPlayers
 import com.mk.match.data.MatchesDAO
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
-import javax.inject.Inject
 
-@HiltViewModel
-class AddMatchViewModel @Inject constructor(
+class AddMatchViewModel @AssistedInject constructor(
     private val competitorsDAO: CompetitorsDAO,
     private val matchesDAO: MatchesDAO,
+    @Assisted val matchId: Int
 ) : BaseRxViewModel() {
-
-    class UIState {
-        var match = Match()
-        var dataValid = false
-    }
-
-    class Match {
-        var id = 0
-        var matchTime = Calendar.getInstance().timeInMillis
-        var player1: UIPlayer = UIPlayer.NoPlayer
-        var player2: UIPlayer = UIPlayer.NoPlayer
-        var score1: String = ""
-        var score2: String = ""
-    }
 
     private var match = Match()
     val matchUI = MutableLiveData<UIState>()
 
-
     private val player1Subject = BehaviorSubject.create<UIPlayer>()
     private val player2Subject = BehaviorSubject.create<UIPlayer>()
-
     private val matchDataSubject = BehaviorSubject.create<Match>()
 
     private val _player1Suggestions: MutableLiveData<List<UIPlayer.SelectedPlayer>> =
@@ -63,6 +48,7 @@ class AddMatchViewModel @Inject constructor(
         initPlayer1Selection()
         initPlayer2Selection()
         initVerification()
+        setMatchIdForEdit(matchId)
         player1Subject.onNext(UIPlayer.NoPlayer)
         player2Subject.onNext(UIPlayer.NoPlayer)
     }
@@ -85,7 +71,7 @@ class AddMatchViewModel @Inject constructor(
                                 && score1Int > -1 && score2Int > -1
 
                     UIState().apply {
-                        this.match = match
+                        this.matchData = match
                         this.dataValid = matchDataValid
                     }
                 }
@@ -96,26 +82,13 @@ class AddMatchViewModel @Inject constructor(
         }
     }
 
-    fun setMatchIdForEdit(matchId: Int) {
+    private fun setMatchIdForEdit(matchId: Int) {
         withBoundSubscription {
             matchesDAO.getMatch(matchId)
                 .map { matchWithPlayers ->
-                    Match().apply {
-                        id = matchWithPlayers.match.id
-                        matchTime = matchWithPlayers.match.recordTime
-                        player1 = UIPlayer.SelectedPlayer(
-                            matchWithPlayers.player1.id,
-                            matchWithPlayers.player1.name
-                        )
-                        player2 = UIPlayer.SelectedPlayer(
-                            matchWithPlayers.player2.id,
-                            matchWithPlayers.player2.name
-                        )
-                        score1 = matchWithPlayers.match.competitor1Score.toString()
-                        score2 = matchWithPlayers.match.competitor2Score.toString()
-                    }
+                    Match.fromMatchEntity(matchWithPlayers)
                 }
-                .doOnNext { match ->
+                .doOnSuccess { match ->
                     matchDataSubject.onNext(match)
                     player1Subject.onNext(match.player1)
                     player1Subject.onNext(match.player2)
@@ -129,31 +102,31 @@ class AddMatchViewModel @Inject constructor(
     }
 
     private fun initPlayer1Selection() {
-        val subscription = player1Subject
-            .switchMap { player ->
-                filterPlayerOut(player)
-            }.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { _player2Suggestions.value = it }
-
-        bindDisposables(subscription)
+        withBoundSubscription {
+            player1Subject
+                .switchMap { player ->
+                    filterPlayerOut(player)
+                }.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { _player2Suggestions.value = it }
+        }
     }
 
     private fun initPlayer2Selection() {
-        val subscription = player2Subject
-            .switchMap { player ->
-                filterPlayerOut(player)
-            }.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                _player1Suggestions.value = it
-            }
-
-        bindDisposables(subscription)
+        withBoundSubscription {
+            player2Subject
+                .switchMap { player ->
+                    filterPlayerOut(player)
+                }.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    _player1Suggestions.value = it
+                }
+        }
     }
 
-    private fun filterPlayerOut(player: UIPlayer) =
-        competitorsDAO
+    private fun filterPlayerOut(player: UIPlayer): Observable<MutableList<UIPlayer.SelectedPlayer>> {
+        return competitorsDAO
             .getCompetitors()
             .toObservable()
             .flatMapSingle { competitors ->
@@ -168,6 +141,7 @@ class AddMatchViewModel @Inject constructor(
                     UIPlayer.SelectedPlayer(competitor.id, competitor.name)
                 }.toList()
             }
+    }
 
     fun player1Selected(player: UIPlayer) {
         match.player1 = player
@@ -182,16 +156,18 @@ class AddMatchViewModel @Inject constructor(
     }
 
     fun player1ScoreSet(value: String) {
-        if (match.score1 == value)
+        if (match.score1 == value) {
             return
+        }
 
         match.score1 = value
         matchDataSubject.onNext(match)
     }
 
     fun player2ScoreSet(value: String) {
-        if (match.score2 == value)
+        if (match.score2 == value) {
             return
+        }
 
         match.score2 = value
         matchDataSubject.onNext(match)
@@ -206,7 +182,6 @@ class AddMatchViewModel @Inject constructor(
             score1Int = Integer.parseInt(match.score1)
             score2Int = Integer.parseInt(match.score2)
         } catch (ex: Exception) {
-            //TODO notify error
             // ignore
         }
 
@@ -219,7 +194,7 @@ class AddMatchViewModel @Inject constructor(
                 competitor1Score = score1Int,
                 competitor2Score = score2Int
             )
-            val disposable =
+            withBoundSubscription {
                 Observable.just(match).flatMapCompletable {
                     if (match.id > 0) {
                         matchesDAO.updateMatch(entity)
@@ -230,7 +205,40 @@ class AddMatchViewModel @Inject constructor(
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe { _uiEvent.setValue(UiEvent.Success) }
-            bindDisposables(disposable)
+            }
+        }
+    }
+}
+
+class UIState {
+    var matchData = Match()
+    var dataValid = false
+}
+
+class Match {
+    var id = 0
+    var matchTime = Calendar.getInstance().timeInMillis
+    var player1: UIPlayer = UIPlayer.NoPlayer
+    var player2: UIPlayer = UIPlayer.NoPlayer
+    var score1: String = ""
+    var score2: String = ""
+
+    companion object {
+        fun fromMatchEntity(matchWithPlayers: MatchWithPlayers): Match {
+            return Match().apply {
+                id = matchWithPlayers.match.id
+                matchTime = matchWithPlayers.match.recordTime
+                player1 = UIPlayer.SelectedPlayer(
+                    matchWithPlayers.player1.id,
+                    matchWithPlayers.player1.name
+                )
+                player2 = UIPlayer.SelectedPlayer(
+                    matchWithPlayers.player2.id,
+                    matchWithPlayers.player2.name
+                )
+                score1 = matchWithPlayers.match.competitor1Score.toString()
+                score2 = matchWithPlayers.match.competitor2Score.toString()
+            }
         }
     }
 }

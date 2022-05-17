@@ -11,5 +11,5 @@ data class MatchWithPlayers(
     val player1: CompetitorEntity,
     @Relation(parentColumn = MatchEntity.COMPETITOR_2_ID,
         entityColumn = "id")
-    val player2: CompetitorEntity,
+    val player2: CompetitorEntity
 )
