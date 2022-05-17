@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/createCompetitorFragment"
         android:name="com.mk.competitors.CreateCompetitorFragment"
-        android:label="create_competitor_fragment"
+        android:label="Add player"
         tools:layout="@layout/create_competitor_fragment" />
 </navigation>
