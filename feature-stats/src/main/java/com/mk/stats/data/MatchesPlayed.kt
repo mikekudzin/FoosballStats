@@ -1,17 +1,6 @@
 package com.mk.stats.data
 
 import androidx.room.DatabaseView
-import com.mk.competitors.data.CompetitorEntity
-import com.mk.match.data.MatchEntity
-
-//@DatabaseView(viewName = "matches_played",
-//    value = "SELECT ${CompetitorEntity.TABLE_NAME}.${CompetitorEntity.ID} AS playerId, ${CompetitorEntity.COMPETITOR_NAME} AS playerName, count() AS matchesPlayed " +
-//        "FROM ${CompetitorEntity.TABLE_NAME} " +
-//        "JOIN ${MatchEntity.MATCH_TABLE_NAME} ON (${CompetitorEntity.TABLE_NAME}.${CompetitorEntity.ID} = ${MatchEntity.COMPETITOR_1_ID} " +
-//        "OR ${CompetitorEntity.TABLE_NAME}.${CompetitorEntity.ID} = ${MatchEntity.COMPETITOR_2_ID}) " +
-//        "GROUP BY playerId;")
-//data class MatchesPlayed(val playerId: Int, val playerName: String, val matchesPlayed: Int)
-
 
 @DatabaseView(viewName = "player_stats",
 value = "SELECT competitors.id AS playerId, competitors.name AS playerName, " +
