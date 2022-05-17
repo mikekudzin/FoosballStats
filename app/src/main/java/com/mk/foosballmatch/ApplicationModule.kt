@@ -14,11 +14,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import dagger.hilt.migration.DisableInstallInCheck
 import javax.inject.Singleton
 
-@Module
+@Module(includes = [RepositoryBindings::class])
 @InstallIn(SingletonComponent::class)
-abstract class ApplicationModule {
+class ApplicationModule {
 
     @Provides
     @Singleton
@@ -49,13 +50,17 @@ abstract class ApplicationModule {
     fun provideStatsDao(dataBase: DataBase): StatsDAO {
         return dataBase.statsDao()
     }
+}
+
+@Module
+@DisableInstallInCheck
+interface RepositoryBindings {
+    @Binds
+    fun bindCompetitorsRepo(dao: CompetitorsDAO): CompetitorsRepository
 
     @Binds
-    abstract fun bindCompetitorsRepo(dao: CompetitorsDAO): CompetitorsRepository
+    fun bindMatchesRepo(dao: MatchesDAO): MatchesRepository
 
     @Binds
-    abstract fun bindMatchesRepo(dao: MatchesDAO): MatchesRepository
-
-    @Binds
-    abstract fun bindStatsRepo(dao: StatsDAO): StatsRepository
+    fun bindStatsRepo(dao: StatsDAO): StatsRepository
 }
