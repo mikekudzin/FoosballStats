@@ -16,6 +16,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Maybe
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import io.reactivex.rxjava3.subjects.PublishSubject
 
 class AddMatchViewModel @AssistedInject constructor(
@@ -27,8 +28,8 @@ class AddMatchViewModel @AssistedInject constructor(
     private var match = Match()
     val matchUI = MutableLiveData<UIState>()
 
-    private val player1Subject = PublishSubject.create<UIPlayer>()
-    private val player2Subject = PublishSubject.create<UIPlayer>()
+    private val player1Subject = BehaviorSubject.create<UIPlayer>()
+    private val player2Subject = BehaviorSubject.create<UIPlayer>()
     private val matchDataSubject = PublishSubject.create<Match>()
 
     private val _player1Suggestions: MutableLiveData<List<UIPlayer.SelectedPlayer>> =

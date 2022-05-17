@@ -2,4 +2,7 @@
 <resources>
     <string name="label_recent_matches">Recent matches</string>
     <string name="label_add_match">Add match</string>
+    <string name="select_player2_hint">Select player 2</string>
+    <string name="select_player1_hint">Select player 1</string>
+    <string name="save_result">Save result</string>
 </resources>

@@ -13,7 +13,7 @@
         <entry key="app/src/main/res/layout/create_competitor_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.2833333333333333" />
         <entry key="feature-competitors/src/main/res/layout/create_competitor_fragment.xml" value="0.1" />
-        <entry key="feature-match/src/main/res/layout/add_match_fragment.xml" value="0.1" />
+        <entry key="feature-match/src/main/res/layout/add_match_fragment.xml" value="0.335" />
         <entry key="feature-match/src/main/res/layout/match_history_item.xml" value="0.16893115942028986" />
         <entry key="feature-match/src/main/res/layout/matches_history.xml" value="0.16893115942028986" />
         <entry key="feature-stats/src/main/res/layout/fragment_rank.xml" value="0.335" />

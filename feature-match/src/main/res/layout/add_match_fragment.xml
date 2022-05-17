@@ -19,13 +19,33 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Select player"
-        app:layout_constraintBottom_toTopOf="@id/score1"
-        app:layout_constraintEnd_toStartOf="@id/guideline"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginVertical="16dp"
+        android:hint="@string/select_player1_hint"
+        app:layout_constraintBottom_toTopOf="@id/spinner2"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.20"
+        app:layout_constraintVertical_bias="0.15"
         app:layout_constraintVertical_chainStyle="packed">
+
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/spinner2"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/select_player2_hint"
+        app:layout_constraintBottom_toTopOf="@id/score1"
+        app:layout_constraintEnd_toEndOf="@id/spinner1"
+        app:layout_constraintStart_toStartOf="@id/spinner1"
+        app:layout_constraintTop_toBottomOf="@id/spinner1">
 
         <AutoCompleteTextView
             android:layout_width="match_parent"
@@ -47,44 +67,22 @@
         android:textAppearance="?textAppearanceHeadline3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@id/spinner1"
+        app:layout_constraintTop_toBottomOf="@id/spinner2"
         tools:text="3" />
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/spinner2"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="Select player"
-        app:layout_constraintBottom_toTopOf="@id/score2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/guideline"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.20"
-        app:layout_constraintVertical_chainStyle="packed">
-
-        <AutoCompleteTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none" />
-
-    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/score2"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:imeOptions="actionDone"
         android:inputType="number"
         android:maxLength="2"
         android:maxLines="1"
         android:textAlignment="center"
         android:textAppearance="?textAppearanceHeadline3"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/score1"
         app:layout_constraintStart_toEndOf="@id/guideline"
-        app:layout_constraintTop_toBottomOf="@id/spinner2"
+        app:layout_constraintTop_toTopOf="@id/score1"
         tools:text="5" />
 
     <Button
@@ -92,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Save result"
+        android:text="@string/save_result"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/score2" />
