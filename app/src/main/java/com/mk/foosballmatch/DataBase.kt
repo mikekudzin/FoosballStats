@@ -6,11 +6,10 @@ import com.mk.competitors.data.CompetitorEntity
 import com.mk.competitors.data.CompetitorsDAO
 import com.mk.match.data.MatchEntity
 import com.mk.match.data.MatchesDAO
-//import com.mk.stats.data.MatchesPlayed
 import com.mk.stats.data.PlayerStats
 import com.mk.stats.data.StatsDAO
 
-@Database(entities = [CompetitorEntity::class, MatchEntity::class], views = [/*MatchesPlayed::class, */PlayerStats::class], version = 1)
+@Database(entities = [CompetitorEntity::class, MatchEntity::class], views = [PlayerStats::class], version = 2)
 abstract class DataBase: RoomDatabase() {
     abstract fun competitorsDao(): CompetitorsDAO
     abstract fun matchesDao(): MatchesDAO
