@@ -34,7 +34,7 @@ class RankViewModel @Inject constructor(private val statsRepository: StatsReposi
             rankTypeSelected.distinctUntilChanged()
         ) { first: List<PlayerStats>, second: RankType ->
             first to second
-        }.flatMapSingle { pair ->
+        }.switchMapSingle { pair ->
             Observable
                 .fromIterable(pair.first)
                 .map { playerStats ->

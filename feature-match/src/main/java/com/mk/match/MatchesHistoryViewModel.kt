@@ -32,7 +32,7 @@ class MatchesHistoryViewModel @Inject constructor(private val matchesDAO: Matche
     init {
         withBoundSubscription {
          matchesDAO.getAllMatches()
-            .flatMapSingle {
+            .switchMapSingle {
                 Observable.fromIterable(it).map { matchWithPlayers ->
                     with(matchWithPlayers) {
                         val stringDate = DateFormat.getDateTimeInstance().format(match.recordTime);

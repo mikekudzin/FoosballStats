@@ -129,7 +129,7 @@ class AddMatchViewModel @AssistedInject constructor(
         return competitorsRepository
             .getCompetitors()
             .toObservable()
-            .flatMapSingle { competitors ->
+            .switchMapSingle { competitors ->
                 Observable.fromIterable(competitors).filter { competitor ->
                     when (player) {
                         is UIPlayer.SelectedPlayer -> {
